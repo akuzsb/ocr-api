@@ -1,0 +1,12 @@
+services:
+  ocr-api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./extracted_texts:/app/extracted_texts
+      - ./original_pdfs:/app/original_pdfs
+      - main.py:/app/main.py
+    environment:
+      - PYTHONPATH=/app
+    restart: unless-stopped

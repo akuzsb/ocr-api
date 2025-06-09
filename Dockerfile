@@ -1,0 +1,31 @@
+FROM python:3-slim
+
+# Instalar solo las dependencias necesarias del sistema
+RUN apt-get update && apt-get install -y \
+    tesseract-ocr \
+    tesseract-ocr-spa \
+    tesseract-ocr-eng \
+    poppler-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Establecer directorio de trabajo
+WORKDIR /app
+
+# Copiar requirements primero (para aprovechar cache de Docker)
+COPY requirements.txt .
+
+# Instalar dependencias de Python
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copiar solo los archivos necesarios
+COPY main.py .
+
+# Crear directorios para archivos de salida
+RUN mkdir -p extracted_texts original_pdfs
+
+# Exponer puerto
+EXPOSE 8000
+
+# Comando para ejecutar la aplicación
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
