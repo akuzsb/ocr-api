@@ -22,7 +22,7 @@ Esta API permite:
 
 1. **Clonar o descargar el proyecto**
 ```bash
-git clone <tu-repositorio>
+git clone https://github.com/akuzsb/ocr-api
 cd ocr-api
 ```
 
