@@ -1,0 +1,15 @@
+services:
+  ocr-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./main.py:/app/main.py  # Hot reload
+      - ./extracted_texts:/app/extracted_texts
+      - ./original_pdfs:/app/original_pdfs
+    environment:
+      - PYTHONPATH=/app
+      - ENV=development
+    restart: unless-stopped

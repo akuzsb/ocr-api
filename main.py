@@ -15,30 +15,16 @@ def extract_text_from_scanned_pdf(pdf_path, language='spa'):
     if not os.path.exists(pdf_path):
         raise FileNotFoundError(f"El archivo {pdf_path} no existe")
     
-    # Convert PDF pages to images using pdf2image
-    # En Docker no necesitamos especificar poppler_path
     pages = convert_from_path(pdf_path)
-
-    # En Docker, tesseract está en PATH por defecto
-    # pytesseract.pytesseract.tesseract_cmd = 'tesseract'  # No es necesario en Docker
-
-    # Initialize an empty string to store the extracted text
     extracted_text = ""
 
-    # Process each page image
     for page_num, page_image in enumerate(pages):
         print(f"Procesando página {page_num + 1}...")
-        
-        # Configuración optimizada para documentos escaneados
-        # custom_config = r'--oem 3 --psm 6 -c preserve_interword_spaces=1'
-        
-        # Perform OCR on the image with specified language and config
         page_text = pytesseract.image_to_string(
             page_image, 
             lang=language
         )
         
-        # Append the extracted text to the result
         extracted_text += f"\n--- Página {page_num + 1} ---\n"
         extracted_text += page_text
 

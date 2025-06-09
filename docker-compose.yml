@@ -6,7 +6,12 @@ services:
     volumes:
       - ./extracted_texts:/app/extracted_texts
       - ./original_pdfs:/app/original_pdfs
-      - main.py:/app/main.py
     environment:
       - PYTHONPATH=/app
+      - ENV=production
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
